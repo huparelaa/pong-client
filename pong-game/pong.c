@@ -6,6 +6,8 @@
 #include "ball.h"
 #include "paddle.h"
 #include "drawers.h"
+#include "status_checkers.h"
+#include "init.h"
 #define SCREEN_WIDTH 640  // window height
 #define SCREEN_HEIGHT 480 // window width
 
@@ -32,240 +34,6 @@ static SDL_Surface *end;
 // textures
 SDL_Texture *screen_texture;
 
-// inisilise starting position and sizes of game elemements
-static void init_game()
-{
-
-	ball.x = screen->w / 2;
-	ball.y = screen->h / 2;
-	ball.w = 10;
-	ball.h = 10;
-	ball.dy = 1;
-	ball.dx = 1;
-
-	paddle[0].x = 20;
-	paddle[0].y = screen->h / 2 - 50;
-	paddle[0].w = 10;
-	paddle[0].h = 50;
-
-	paddle[1].x = screen->w - 20 - 10;
-	paddle[1].y = screen->h / 2 - 50;
-	paddle[1].w = 10;
-	paddle[1].h = 50;
-}
-
-int check_score()
-{
-
-	int i;
-
-	// loop through player scores
-	for (i = 0; i < 2; i++)
-	{
-
-		// check if score is @ the score win limit
-		if (score[i] == MAX_SCORE)
-		{
-
-			// reset scores
-			score[0] = 0;
-			score[1] = 0;
-
-			// return 1 if player 1 score @ limit
-			if (i == 0)
-			{
-
-				return 1;
-
-				// return 2 if player 2 score is @ limit
-			}
-			else
-			{
-
-				return 2;
-			}
-		}
-	}
-
-	// return 0 if no one has reached a score of 10 yet
-	return 0;
-}
-
-// if return value is 1 collision occured. if return is 0, no collision.
-int check_collision(ball_t a, paddle_t b)
-{
-
-	int left_a, left_b;
-	int right_a, right_b;
-	int top_a, top_b;
-	int bottom_a, bottom_b;
-
-	left_a = a.x;
-	right_a = a.x + a.w;
-	top_a = a.y;
-	bottom_a = a.y + a.h;
-
-	left_b = b.x;
-	right_b = b.x + b.w;
-	top_b = b.y;
-	bottom_b = b.y + b.h;
-
-	if (left_a > right_b)
-	{
-		return 0;
-	}
-
-	if (right_a < left_b)
-	{
-		return 0;
-	}
-
-	if (top_a > bottom_b)
-	{
-		return 0;
-	}
-
-	if (bottom_a < top_b)
-	{
-		return 0;
-	}
-
-	return 1;
-}
-
-/* This routine moves each ball by its motion vector. */
-static void move_ball()
-{
-
-	/* Move the ball by its motion vector. */
-	ball.x += ball.dx;
-	ball.y += ball.dy;
-
-	/* Turn the ball around if it hits the edge of the screen. */
-	if (ball.x < 0)
-	{
-
-		score[1] += 1;
-		init_game();
-	}
-
-	if (ball.x > screen->w - 10)
-	{
-
-		score[0] += 1;
-		init_game();
-	}
-
-	if (ball.y < 0 || ball.y > screen->h - 10)
-	{
-
-		ball.dy = -ball.dy;
-	}
-
-	// check for collision with the paddle
-	int i;
-
-	for (i = 0; i < 2; i++)
-	{
-
-		int c = check_collision(ball, paddle[i]);
-
-		// collision detected
-		if (c == 1)
-		{
-
-			// ball moving left
-			if (ball.dx < 0)
-			{
-
-				ball.dx -= 1;
-
-				// ball moving right
-			}
-			else
-			{
-
-				ball.dx += 1;
-			}
-
-			// change ball direction
-			ball.dx = -ball.dx;
-
-			// change ball angle based on where on the paddle it hit
-			int hit_pos = (paddle[i].y + paddle[i].h) - ball.y;
-
-			if (hit_pos >= 0 && hit_pos < 7)
-			{
-				ball.dy = 4;
-			}
-
-			if (hit_pos >= 7 && hit_pos < 14)
-			{
-				ball.dy = 3;
-			}
-
-			if (hit_pos >= 14 && hit_pos < 21)
-			{
-				ball.dy = 2;
-			}
-
-			if (hit_pos >= 21 && hit_pos < 28)
-			{
-				ball.dy = 1;
-			}
-
-			if (hit_pos >= 28 && hit_pos < 32)
-			{
-				ball.dy = 0;
-			}
-
-			if (hit_pos >= 32 && hit_pos < 39)
-			{
-				ball.dy = -1;
-			}
-
-			if (hit_pos >= 39 && hit_pos < 46)
-			{
-				ball.dy = -2;
-			}
-
-			if (hit_pos >= 46 && hit_pos < 53)
-			{
-				ball.dy = -3;
-			}
-
-			if (hit_pos >= 53 && hit_pos <= 60)
-			{
-				ball.dy = -4;
-			}
-
-			// ball moving right
-			if (ball.dx > 0)
-			{
-
-				// teleport ball to avoid mutli collision glitch
-				if (ball.x < 30)
-				{
-
-					ball.x = 30;
-				}
-
-				// ball moving left
-			}
-			else
-			{
-
-				// teleport ball to avoid mutli collision glitch
-				if (ball.x > 600)
-				{
-
-					ball.x = 600;
-				}
-			}
-		}
-	}
-}
-
 int main(int argc, char *args[])
 {
 
@@ -285,7 +53,7 @@ int main(int argc, char *args[])
 	Uint32 next_game_tick = SDL_GetTicks();
 
 	// Initialize the ball position data.
-	init_game();
+	init_game(&ball, paddle, screen->h, screen->w);
 
 	// render loop
 	while (quit == 0)
@@ -371,7 +139,7 @@ int main(int argc, char *args[])
 		{
 
 			// check score
-			r = check_score();
+			r = check_score(MAX_SCORE, score);
 
 			// if either player wins, change to game over state
 			if (r == 1)
@@ -386,7 +154,7 @@ int main(int argc, char *args[])
 			}
 
 			//* Move the balls for the next frame.
-			move_ball();
+			move_ball(&ball, paddle, screen->h, screen->w, score);
 
 			// draw net
 			draw_net(screen);
