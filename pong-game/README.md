@@ -6,7 +6,8 @@ programming language, using SDL library to display graphics on the screen.
 To compile you need to have SDL installed on your system and the header files
 available to you operating systems PATH environment variable
 
-	gcc -o pong pong.c ball.c paddle.c `sdl2-config --cflags --libs`
+	gcc -o pong pong.c ball.c paddle.c status_checkers.c drawers.c init.c `sdl2-config --cflags --libs`
+hobar@hobarlap:~/projects/telematica/pong-client/pong-game$
 
 ### Update 2019
 
