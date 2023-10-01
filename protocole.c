@@ -8,18 +8,27 @@
 
 char *interpret_command(int command_index);
 
-void stablish_communication(int sockfd, game_status *game, int commands[5], struct sockaddr_in addr)
-{
+game_status stablish_communication(int sockfd, int commands[5], struct sockaddr_in addr)
+{   
+    int some_command = 0;
     for (int i = 0; i < 5; i++)
     {
         if (commands[i] != 0)
         {
+            some_command = 1;
             char *command = interpret_command(i);
             sendto(sockfd, command, sizeof(command), 0, (struct sockaddr *)&addr, sizeof(addr));
         }
     }
+    // si no hay ningún comando, enviamos un "NONE"
+    if(some_command == 0){
+        char *command = "NONE";
+        sendto(sockfd, command, sizeof(command), 0, (struct sockaddr *)&addr, sizeof(addr));
+    }
+    game_status game;
     socklen_t addr_len = sizeof(addr);
-    recvfrom(sockfd, game, sizeof(game), 0, (struct sockaddr *)&addr, &addr_len);
+    recvfrom(sockfd, &game, sizeof(game), 0, (struct sockaddr *)&addr, &addr_len);
+    return game;
 }
 
 // función para interpretar comandos y si es commands[0]==1 devolver el string "UP1"

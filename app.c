@@ -48,7 +48,7 @@ int main(int argc, char *args[])
 {
 
 	// socket setUp
-	char *ip = "3.145.191.38";
+	char *ip = "127.0.0.1";
 	int port = 3001;
 	int sockfd;
 	struct sockaddr_in addr;
@@ -75,18 +75,27 @@ int main(int argc, char *args[])
 	SDL_GetWindowSize(window, &width, &height);
 
 	int sleep = 0;
-	int quit = 0;
-	int state = 0;
-	int r = 0;
 	Uint32 next_game_tick = SDL_GetTicks();
 
 	// Initialize the ball position data.
-	while (quit == 0)
+	while (game.status != 2)
 	{
 		
 		printf("up1:%d down1:%d up2:%d down2:%d start:%d exit:%d\n", commands[0], commands[1], commands[2], commands[3], commands[4], commands[5]);
 		
-		stablish_communication(sockfd, &game, commands, addr);
+		game = stablish_communication(sockfd, commands, addr);
+		//ball position
+		printf("ball x:%d y:%d\n", game.ball.x, game.ball.y);
+		//paddle position
+		printf("paddle1 x:%d y:%d\n", game.paddles[0].x, game.paddles[0].y);
+		printf("paddle2 x:%d y:%d\n", game.paddles[1].x, game.paddles[1].y);
+		//score
+		printf("score1:%d score2:%d\n", game.score[0], game.score[1]);
+		//status
+		printf("status:%d\n", game.status);
+		//r
+		printf("r:%d\n", game.r);
+		
 
 		// check for new events every frame
 		SDL_PumpEvents();
@@ -95,8 +104,6 @@ int main(int argc, char *args[])
 
 		if (keystate[SDL_SCANCODE_ESCAPE])
 		{
-
-			quit = 1;
 			commands[5] = 1;
 		}
 		else
@@ -153,7 +160,6 @@ int main(int argc, char *args[])
 			if (keystate[SDL_SCANCODE_SPACE])
 			{
 
-				state = 1;
 				commands[4] = 1;
 			}
 			else

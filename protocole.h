@@ -8,8 +8,9 @@
 #ifndef PROTOCOLE_H
 #define PROTOCOLE_H
 
+char *interpret_command(int command_index);
 
-void stablish_communication(int sockfd, game_status *game, int commands[5], struct sockaddr_in addr);
+game_status stablish_communication(int sockfd, int commands[5], struct sockaddr_in addr);
 
 
 #endif
