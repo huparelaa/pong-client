@@ -5,7 +5,7 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
-
+#include "globals.h"
 #include "game_status.h"
 #include "ball.h"
 #include "paddle.h"
@@ -48,8 +48,8 @@ int main(int argc, char *args[])
 {
 
 	// socket setUp
-	char *ip = "127.0.0.1";
-	int port = 3001;
+	char *ip = IP;
+	int port = PORT;
 	int sockfd;
 	struct sockaddr_in addr;
 	char buffer[1024];
