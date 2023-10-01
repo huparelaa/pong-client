@@ -11,7 +11,5 @@ typedef struct {
 
 // Funciones relacionadas con la pelota
 void init_ball(ball_t *ball, int x, int y, int w, int h, int dx, int dy);
-/* This routine moves each ball by its motion vector. */
-void move_ball(ball_t *ball, paddle_t paddle[2], int h, int w, int score[2]);
 
 #endif

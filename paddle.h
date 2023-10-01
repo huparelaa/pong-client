@@ -10,6 +10,5 @@ typedef struct {
 
 // Funciones relacionadas con la paleta
 void init_paddle(paddle_t *paddle, int x, int y, int w, int h, int dy);
-void move_paddle(paddle_t *paddle, int height, int d);
 
 #endif

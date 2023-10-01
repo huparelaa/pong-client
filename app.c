@@ -1,26 +1,35 @@
-
-// Using libs SDL, glibc
 #include <SDL.h> //SDL version 2.0
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+
+#include "game_status.h"
 #include "ball.h"
 #include "paddle.h"
 #include "drawers.h"
-#include "status_checkers.h"
-#include "init.h"
+#include "protocole.h"
 #define SCREEN_WIDTH 640  // window height
 #define SCREEN_HEIGHT 480 // window width
+int width;
+int height;
 
-// function prototypes
-// initilise SDL
-int init(int w, int h, int argc, char *args[]);
+int init(int width, int height, int argc, char *args[]);
 
-// Program globals
-static ball_t ball;
-static paddle_t paddle[2];
-int score[] = {0, 0};
-int width, height; // used if fullscreen
-int MAX_SCORE = 5;
+game_status game;
+int commands[] = {0, 0, 0, 0, 0};
+// commands description
+/*
+commands[0] - up1
+commands[1] - down1
+commands[2] - up2
+commands[3] - down2
+commands[4] - start
+commands[5] - exit
+
+*/
 
 SDL_Window *window = NULL; // The window we'll be rendering to
 SDL_Renderer *renderer;	   // The renderer SDL will use to draw to the screen
@@ -31,11 +40,30 @@ static SDL_Surface *title;
 static SDL_Surface *numbermap;
 static SDL_Surface *end;
 
-// textures
 SDL_Texture *screen_texture;
+// creamos una función para enviar inputs y recibir el estado del juego
+
 
 int main(int argc, char *args[])
 {
+
+	// socket setUp
+	char *ip = "3.145.191.38";
+	int port = 3001;
+	int sockfd;
+	struct sockaddr_in addr;
+	char buffer[1024];
+	socklen_t addr_size;
+
+	sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+	memset(&addr, '\0', sizeof(addr));
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons(port);
+	addr.sin_addr.s_addr = inet_addr(ip);
+
+	// obtenemos el estado inicial del juego
+	sendto(sockfd, "FIRST", 1024, 0, (struct sockaddr *)&addr, sizeof(addr));
+	recvfrom(sockfd, &game, sizeof(game), 0, (struct sockaddr *)&addr, &addr_size);
 
 	// SDL Window setup
 	if (init(SCREEN_WIDTH, SCREEN_HEIGHT, argc, args) == 1)
@@ -53,11 +81,12 @@ int main(int argc, char *args[])
 	Uint32 next_game_tick = SDL_GetTicks();
 
 	// Initialize the ball position data.
-	init_game(&ball, paddle, screen->h, screen->w);
-
-	// render loop
 	while (quit == 0)
 	{
+		
+		printf("up1:%d down1:%d up2:%d down2:%d start:%d exit:%d\n", commands[0], commands[1], commands[2], commands[3], commands[4], commands[5]);
+		
+		stablish_communication(sockfd, &game, commands, addr);
 
 		// check for new events every frame
 		SDL_PumpEvents();
@@ -68,28 +97,49 @@ int main(int argc, char *args[])
 		{
 
 			quit = 1;
+			commands[5] = 1;
+		}
+		else
+		{
+			commands[5] = 0;
 		}
 
 		if (keystate[SDL_SCANCODE_UP])
 		{
 
-			move_paddle(&paddle[1], screen->h, 1);
+			commands[0] = 1;
+		}
+		else
+		{
+			commands[0] = 0;
 		}
 
 		if (keystate[SDL_SCANCODE_DOWN])
 		{
 
-			move_paddle(&paddle[1], screen->h, 0);
+			commands[1] = 1;
+		}
+		else
+		{
+			commands[1] = 0;
 		}
 
 		if (keystate[SDL_SCANCODE_W])
 		{
-			move_paddle(&paddle[0], screen->h, 1);
+			commands[2] = 1;
+		}
+		else
+		{
+			commands[2] = 0;
 		}
 
 		if (keystate[SDL_SCANCODE_S])
 		{
-			move_paddle(&paddle[0], screen->h, 0);
+			commands[3] = 1;
+		}
+		else
+		{
+			commands[3] = 0;
 		}
 
 		// draw background
@@ -97,30 +147,38 @@ int main(int argc, char *args[])
 		SDL_FillRect(screen, NULL, 0x000000ff);
 
 		// display main menu
-		if (state == 0)
+		if (game.status == 0)
 		{
 
 			if (keystate[SDL_SCANCODE_SPACE])
 			{
 
 				state = 1;
+				commands[4] = 1;
+			}
+			else
+			{
+				commands[4] = 0;
 			}
 
 			draw_menu(screen, title);
-
 		}
-		else if (state == 2)
+		else if (game.status == 2)
 		{
 
 			if (keystate[SDL_SCANCODE_SPACE])
 			{
-				state = 0;
+				commands[4] = 1;
 				// delay for a little bit so the space bar press dosnt get triggered twice
 				// while the main menu is showing
 				SDL_Delay(500);
 			}
+			else
+			{
+				commands[4] = 0;
+			}
 
-			if (r == 1)
+			if (game.r == 1)
 			{
 
 				// if player 1 is AI if player 1 was human display the return value of r not 3
@@ -135,41 +193,21 @@ int main(int argc, char *args[])
 
 			// display the game
 		}
-		else if (state == 1)
+		else if (game.status == 1)
 		{
-
-			// check score
-			r = check_score(MAX_SCORE, score);
-
-			// if either player wins, change to game over state
-			if (r == 1)
-			{
-
-				state = 2;
-			}
-			else if (r == 2)
-			{
-
-				state = 2;
-			}
-
-			//* Move the balls for the next frame.
-			move_ball(&ball, paddle, screen->h, screen->w, score);
-
 			// draw net
 			draw_net(screen);
 
 			// draw paddles
-			draw_paddle(screen, paddle);
+			draw_paddle(screen, game.paddles);
 
 			//* Put the ball on the screen.
-			draw_ball(screen, &ball);
+			draw_ball(screen, &game.ball);
 
 			// draw the score
-			draw_player_score(screen, numbermap, score[0], 1);
-			draw_player_score(screen, numbermap, score[1], 2);
+			draw_player_score(screen, numbermap, game.score[0], 1);
+			draw_player_score(screen, numbermap, game.score[1], 2);
 		}
-
 		SDL_UpdateTexture(screen_texture, NULL, screen->pixels, screen->w * sizeof(Uint32));
 		SDL_RenderCopy(renderer, screen_texture, NULL, NULL);
 
@@ -186,7 +224,6 @@ int main(int argc, char *args[])
 			SDL_Delay(sleep);
 		}
 	}
-
 	// free loaded images
 	SDL_FreeSurface(screen);
 	SDL_FreeSurface(title);
@@ -204,7 +241,6 @@ int main(int argc, char *args[])
 
 	return 0;
 }
-
 
 int init(int width, int height, int argc, char *args[])
 {
