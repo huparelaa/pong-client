@@ -162,16 +162,12 @@ int main(int argc, char *args[])
 
 				commands[4] = 1;
 			}
-			else
-			{
-				commands[4] = 0;
-			}
+			
 
 			draw_menu(screen, title);
 		}
 		else if (game.status == 2)
 		{
-
 			if (keystate[SDL_SCANCODE_SPACE])
 			{
 				commands[4] = 1;
@@ -201,6 +197,8 @@ int main(int argc, char *args[])
 		}
 		else if (game.status == 1)
 		{
+			commands[4] = 0;
+
 			// draw net
 			draw_net(screen);
 
@@ -223,7 +221,6 @@ int main(int argc, char *args[])
 		// time it takes to render  frame in milliseconds
 		next_game_tick += 1000 / 60;
 		sleep = next_game_tick - SDL_GetTicks();
-
 		if (sleep >= 0)
 		{
 
