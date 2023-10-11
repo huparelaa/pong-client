@@ -1,2 +1,2 @@
-compile: 
-	gcc -o game app.c  drawers.c protocole.c `sdl2-config --cflags --libs`
+compile:
+	gcc -o client client.c
