@@ -17,11 +17,6 @@ char send_buffer[BUF_SIZE];
 char recv_buffer[BUF_SIZE + USERNAME_LEN];
 char username[USERNAME_LEN];
 
-typedef struct {
-    pthread_t threads[2];
-    pthread_attr_t attr;
-} ThreadData;
-
 void start_server(pthread_t threads[2], pthread_attr_t attr){
     bzero(send_buffer, BUF_SIZE);
     bzero(recv_buffer, BUF_SIZE + USERNAME_LEN);
