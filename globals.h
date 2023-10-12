@@ -1,3 +1,5 @@
+#include<string.h>
+
 // ROOMS
 #define MAX_CLIENTS 2
 #define MAX_ROOMS 10
