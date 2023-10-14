@@ -19,7 +19,7 @@
 
 //ACTIONS
 #define ERROR "error\n"
-#define CLOSE "close\n"
+#define CLOSE "/close\n"
 #define EXIT "exit\n"
 #define USERNAMExMESSAGE ": "
 
