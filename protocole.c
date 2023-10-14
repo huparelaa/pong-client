@@ -9,6 +9,7 @@
 #include "protocole.h"
 
 int done = FALSE;
+int in_game = FALSE;
 int sockfd;
 
 pthread_mutex_t mutexsum = PTHREAD_MUTEX_INITIALIZER;
@@ -17,7 +18,8 @@ char send_buffer[BUF_SIZE];
 char recv_buffer[BUF_SIZE + USERNAME_LEN];
 char username[USERNAME_LEN];
 
-void start_server(pthread_t threads[2], pthread_attr_t attr){
+void start_server(pthread_t threads[2], pthread_attr_t attr)
+{
     bzero(send_buffer, BUF_SIZE);
     bzero(recv_buffer, BUF_SIZE + USERNAME_LEN);
 
@@ -52,7 +54,8 @@ void start_server(pthread_t threads[2], pthread_attr_t attr){
     server_addr.sin_port = htons(portnum); // port
     server_addr.sin_addr = *((struct in_addr *)server_host->h_addr);
 
-    if(connect(sockfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) == SYSERR){
+    if (connect(sockfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) == SYSERR)
+    {
         perror("Error connecting to server");
         exit(EXIT_FAILURE);
     }
@@ -60,17 +63,18 @@ void start_server(pthread_t threads[2], pthread_attr_t attr){
     printf("Connected to server\n");
 
     strcpy(send_buffer, username);
-    if(send(sockfd, send_buffer, strlen(send_buffer), 0) == SYSERR){
+    if (send(sockfd, send_buffer, strlen(send_buffer), 0) == SYSERR)
+    {
         perror("Error sending username to server");
         exit(EXIT_FAILURE);
     }
 
-     // create threads
+    // create threads
     // Thread 1: takes in user input and sends out messages
     // Thread 2: listens for messages that are comming in from the server and prints them to screen
     //  Set up threads
-    //pthread_t threads[2];
-    //pthread_attr_t attr;
+    // pthread_t threads[2];
+    // pthread_attr_t attr;
 
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
@@ -127,6 +131,16 @@ void *receiver()
             done = TRUE;
             pthread_mutex_destroy(&mutexsum);
             pthread_exit(NULL);
+        }
+        else if (strcmp(START, recv_buffer) == 0)
+        {
+            in_game = TRUE;
+            init_game();
+        }
+        else if (strcmp(END, recv_buffer) == 0)
+        {
+            in_game = FALSE;
+            //end_game();
         }
         else
         {
