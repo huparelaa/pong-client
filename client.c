@@ -7,12 +7,24 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include "protocole.h"
+#include "pong.h"
 
 extern int done;
 extern int sockfd;
-
-pthread_t threads[2];
+extern int in_game;
+pthread_t threads[3];
 pthread_attr_t attr;
+
+void *game()
+{
+    while (!done)
+    {
+        if (in_game)
+        {
+            pong_init();
+        }
+    }
+}
 
 int main()
 {
@@ -20,7 +32,7 @@ int main()
     // Run the sender and receiver threads
     pthread_create(&threads[0], &attr, sender, NULL);
     pthread_create(&threads[1], &attr, receiver, NULL);
-
+    pthread_create(&threads[2], &attr, game, NULL);
     // Wait until done is TRUE then exit program
     while (!done)
         ;

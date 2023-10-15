@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include "protocole.h"
+#include "pong.h"
 
 int done = FALSE;
 int in_game = FALSE;
@@ -135,12 +136,10 @@ void *receiver()
         else if (strcmp(START, recv_buffer) == 0)
         {
             in_game = TRUE;
-            init_game();
         }
         else if (strcmp(END, recv_buffer) == 0)
         {
             in_game = FALSE;
-            //end_game();
         }
         else
         {
