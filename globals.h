@@ -45,3 +45,9 @@
 // PONG VARIABLES
 #define SCREEN_WIDTH 640  // window height
 #define SCREEN_HEIGHT 480 // window width
+
+// PONG UPDATERS
+#define BALL_UPDATER "BALL:"
+#define PADDLE1_UPDATER "PADDLE1:"
+#define PADDLE2_UPDATER "PADDLE2:"
+#define SCORE_UPDATER "SCORE:"

@@ -1,5 +1,7 @@
 #include "pong.h"
 #include "globals.h"
+#include "pong-src/ball.h"
+#include "pong-src/paddle.h"
 #include <SDL.h> //SDL version 2.0
 #include "pong-src/drawers.h"
 
@@ -17,6 +19,31 @@ static SDL_Surface *end;
 // textures
 SDL_Texture *screen_texture;
 int init();
+// Program globals
+ball_t ball;
+paddle_t paddle[2];
+int score[] = {0, 0};
+
+void update_ball(int x, int y, int dx, int dy)
+{
+    ball_updater(&ball, x, y, dx, dy);
+}
+
+void update_paddle1(int x, int y)
+{
+    paddle1_updater(&paddle[0], x, y);
+}
+
+void update_paddle2(int x, int y)
+{
+    paddle2_updater(&paddle[1], x, y);
+}
+
+void update_score(int score1, int score2)
+{
+    score[0] = score1;
+    score[1] = score2;
+}
 
 void pong_init()
 {
@@ -49,22 +76,18 @@ void pong_init()
         SDL_RenderClear(renderer);
         SDL_FillRect(screen, NULL, 0x000000ff);
 
-        // display main menu
-        if (state == 0)
-        {
+        // draw the net
+        draw_net(screen);
 
-            if (keystate[SDL_SCANCODE_SPACE])
-            {
+        // draw the ball
+        draw_ball(screen, &ball);
 
-                state = 1;
-            }
+        // draw the paddles
+        draw_paddle(screen, paddle);
 
-            draw_menu(screen, title);
-        }
-        else if (state == 1)
-        {
-            draw_net(screen);
-        }
+        // draw the score
+        draw_player_score(screen, numbermap, score[0], 1);
+        draw_player_score(screen, numbermap, score[1], 2);
 
         SDL_UpdateTexture(screen_texture, NULL, screen->pixels, screen->w * sizeof(Uint32));
         SDL_RenderCopy(renderer, screen_texture, NULL, NULL);
@@ -113,12 +136,11 @@ int init()
         return SYSERR;
     }
 
-    if(window == NULL)
+    if (window == NULL)
     {
         printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         return SYSERR;
     }
-
 
     // Obtén las dimensiones de la ventana después de crearla
     SDL_GetWindowSize(window, &width, &height);

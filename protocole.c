@@ -8,7 +8,7 @@
 #include <netdb.h>
 #include "protocole.h"
 #include "pong.h"
-
+#include "parser.h"
 int done = FALSE;
 int in_game = FALSE;
 int sockfd;
@@ -143,7 +143,10 @@ void *receiver()
         }
         else
         {
-            printf("%s", recv_buffer);
+            if (buffer_parser(recv_buffer) == SYSERR)
+            {
+                printf("%s", recv_buffer); // no es un mensaje de actualización
+            }
             pthread_mutex_unlock(&mutexsum);
         }
     }
