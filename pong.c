@@ -4,6 +4,8 @@
 #include "pong-src/paddle.h"
 #include <SDL.h> //SDL version 2.0
 #include "pong-src/drawers.h"
+#include "pong-src/status_checkers.h"
+#include "pong_info_sender.h"
 
 int width, height; // used if fullscreen
 extern int in_game;
@@ -23,6 +25,7 @@ int init();
 ball_t ball;
 paddle_t paddle[2];
 int score[] = {0, 0};
+int player = 0;
 
 void update_ball(int x, int y, int dx, int dy)
 {
@@ -43,6 +46,11 @@ void update_score(int score1, int score2)
 {
     score[0] = score1;
     score[1] = score2;
+}
+
+void update_player(int player_number)
+{
+    player = player_number-1; // player_number is 1 or 2, but player is 0 or 1 (array index)
 }
 
 void pong_init()
@@ -72,6 +80,21 @@ void pong_init()
             quit = 1;
         }
 
+        if (keystate[SDL_SCANCODE_UP] || keystate[SDL_SCANCODE_W])
+        {
+            move_paddle(&paddle[player],height, 1); // 1 is up
+            send_paddle_position(paddle[player].x, paddle[player].y, player+1);
+        }
+        if (keystate[SDL_SCANCODE_DOWN] || keystate[SDL_SCANCODE_S])
+        {
+            move_paddle(&paddle[player],height, 0); // 0 is down
+            send_paddle_position(paddle[player].x, paddle[player].y, player+1);
+        }
+        
+
+        move_ball(&ball, height, width, paddle[player], player);
+        
+        
         // draw background
         SDL_RenderClear(renderer);
         SDL_FillRect(screen, NULL, 0x000000ff);

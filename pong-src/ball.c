@@ -1,10 +1,37 @@
 #include "ball.h"
+#include "status_checkers.h"
+#include "paddle.h"
+#include <stdio.h> 
 // Función para inicializar una pelota
-void ball_updater(ball_t *ball, int x, int y, int dx, int dy){
+void ball_updater(ball_t *ball, int x, int y, int dx, int dy)
+{
     ball->x = x;
     ball->y = y;
     ball->dx = dx;
     ball->dy = dy;
+}
+
+// Mover la pelota
+void move_ball(ball_t *ball, int h, int w, paddle_t paddle, int player)
+{
+    ball->x += ball->dx;
+    ball->y += ball->dy;
+
+    if (ball->x < 0)
+    {
+        ball->dx = -ball->dx;
+    }
+
+    if (ball->x > w - 10)
+    {
+        ball->dx = -ball->dx;
+    }
+
+    if (ball->y < 0 || ball->y > h - 10)
+    {
+        ball->dy = -ball->dy;
+    }
+
 }
 
 // Función para mover una pelota
@@ -42,6 +69,5 @@ void ball_updater(ball_t *ball, int x, int y, int dx, int dy){
 //             collision_handler(ball, paddle[i]);
 //         }
 //     }
-
 
 // }

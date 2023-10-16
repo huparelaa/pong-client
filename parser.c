@@ -22,25 +22,25 @@ int buffer_parser(char *buffer)
         update_ball(x, y, dx, dy);
         return OK;
     }
-    else if(strcmp(token, PADDLE1_UPDATER) == 0)
+    else if (strcmp(token, PADDLE1_UPDATER) == 0)
     {
         token = strtok(NULL, " ");
         int x = atoi(token);
         token = strtok(NULL, " ");
         int y = atoi(token);
-        update_paddle1(x,y);
+        update_paddle1(x, y);
         return OK;
     }
-    else if(strcmp(token, PADDLE2_UPDATER) == 0)
+    else if (strcmp(token, PADDLE2_UPDATER) == 0)
     {
         token = strtok(NULL, " ");
         int x = atoi(token);
         token = strtok(NULL, " ");
         int y = atoi(token);
-        update_paddle2(x,y);
+        update_paddle2(x, y);
         return OK;
     }
-    else if(strcmp(token, SCORE_UPDATER) == 0)
+    else if (strcmp(token, SCORE_UPDATER) == 0)
     {
         token = strtok(NULL, " ");
         int score1 = atoi(token);
@@ -49,5 +49,13 @@ int buffer_parser(char *buffer)
         update_score(score1, score2);
         return OK;
     }
-    return SYSERR; // No es un mensaje de actualización
+    else if (strcmp(token, NUMBER_PLAYER) == 0)
+    {
+        token = strtok(NULL, " ");
+        int player = atoi(token);
+        update_player(player);
+        return OK;
+    }
+    else
+        return SYSERR; // No es un mensaje de actualización
 }

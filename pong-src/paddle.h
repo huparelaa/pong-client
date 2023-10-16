@@ -8,6 +8,7 @@ typedef struct {
     int dy; // vector de movimiento
 } paddle_t;
 
+void move_paddle(paddle_t *paddle, int height, int d);
 void paddle1_updater(paddle_t *paddle, int x, int y);
 void paddle2_updater(paddle_t *paddle, int x, int y);
 
