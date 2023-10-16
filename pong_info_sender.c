@@ -13,6 +13,20 @@ void send_paddle_position(int x, int y, int player)
     // send message to server
     if (send(sockfd, send_buffer, strlen(send_buffer), 0) == SYSERR)
     {
-        perror("send");
+        perror("paddle sending");
+    }
+}
+
+void player_scored(int player){
+    char send_buffer[BUF_SIZE];
+    if(player == 1){
+        sprintf(send_buffer, "%s", SCORE_SENDER_1);
+    }else if(player == 2){
+        sprintf(send_buffer, "%s", SCORE_SENDER_2);
+    }
+    // send message to server
+    if (send(sockfd, send_buffer, strlen(send_buffer), 0) == SYSERR)
+    {
+        perror("score sending");
     }
 }

@@ -16,6 +16,7 @@
 //SERVER
 #define PORT 3001
 #define IP "3.145.191.38"
+//#define IP "127.0.0.1"
 
 //ACTIONS
 #define ERROR "error\n"
@@ -52,3 +53,9 @@
 #define PADDLE2_UPDATER "PADDLE2:"
 #define SCORE_UPDATER "SCORE:"
 #define NUMBER_PLAYER "PLAYER:"
+#define GAME_OVER "WINNER:"
+#define CLOSE_GAME "CLOSE"
+
+// PONG SENDER FLAGS
+#define SCORE_SENDER_1 "1SCORED"
+#define SCORE_SENDER_2 "2SCORED"

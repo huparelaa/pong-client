@@ -56,6 +56,18 @@ int buffer_parser(char *buffer)
         update_player(player);
         return OK;
     }
+    else if (strcmp(token, GAME_OVER) == 0)
+    {
+        token = strtok(NULL, " ");
+        int winner = atoi(token);
+        update_winner(winner);
+        return OK;
+    }
+    else if (strcmp(token, CLOSE_GAME) == 0)
+    {
+        close_game();
+        return OK;
+    }
     else
         return SYSERR; // No es un mensaje de actualización
 }

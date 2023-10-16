@@ -119,3 +119,45 @@ void draw_paddle(SDL_Surface *screen, paddle_t paddle[2])
         }
     }
 }
+
+void draw_game_over(int p, SDL_Surface *screen, SDL_Surface *end)
+{
+
+    SDL_Rect p1;
+    SDL_Rect p2;
+    SDL_Rect cpu;
+    SDL_Rect dest;
+
+    p1.x = 0;
+    p1.y = 0;
+    p1.w = end->w;
+    p1.h = 75;
+
+    p2.x = 0;
+    p2.y = 75;
+    p2.w = end->w;
+    p2.h = 75;
+
+    cpu.x = 0;
+    cpu.y = 150;
+    cpu.w = end->w;
+    cpu.h = 75;
+
+    dest.x = (screen->w / 2) - (end->w / 2);
+    dest.y = (screen->h / 2) - (75 / 2);
+    dest.w = end->w;
+    dest.h = 75;
+
+    switch (p)
+    {
+
+    case 1:
+        SDL_BlitSurface(end, &p1, screen, &dest);
+        break;
+    case 2:
+        SDL_BlitSurface(end, &p2, screen, &dest);
+        break;
+    default:
+        SDL_BlitSurface(end, &cpu, screen, &dest);
+    }
+}

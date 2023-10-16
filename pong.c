@@ -21,11 +21,17 @@ static SDL_Surface *end;
 // textures
 SDL_Texture *screen_texture;
 int init();
+
 // Program globals
 ball_t ball;
 paddle_t paddle[2];
 int score[] = {0, 0};
 int player = 0;
+int winner = 0;
+
+// changable variables
+int sleep = 0;
+int quit = 0;
 
 void update_ball(int x, int y, int dx, int dy)
 {
@@ -46,23 +52,32 @@ void update_score(int score1, int score2)
 {
     score[0] = score1;
     score[1] = score2;
+    printf("Score: %d %d\n", score[0], score[1]);
 }
 
 void update_player(int player_number)
 {
-    player = player_number-1; // player_number is 1 or 2, but player is 0 or 1 (array index)
+    player = player_number - 1; // player_number is 1 or 2, but player is 0 or 1 (array index)
+}
+
+void update_winner(int winner_number)
+{
+    winner = winner_number;
+}
+
+void close_game()
+{
 }
 
 void pong_init()
 {
+    quit = 0;
     if (init() == SYSERR)
     {
         return;
     }
     SDL_GetWindowSize(window, &width, &height);
 
-    int sleep = 0;
-    int quit = 0;
     int state = 0;
     int r = 0;
     Uint32 next_game_tick = SDL_GetTicks();
@@ -74,27 +89,40 @@ void pong_init()
 
         const Uint8 *keystate = SDL_GetKeyboardState(NULL);
 
+        if (winner != 0)
+        {
+            if (winner == player)
+            {
+               printf("YOU WON! 😎\n");
+            }
+            else
+            {
+                printf("YOU LOST 😔\n");
+            }
+
+            winner = 0;
+            quit = 1;
+            in_game = FALSE;
+        }
+
         if (keystate[SDL_SCANCODE_ESCAPE])
         {
-            in_game = FALSE;
-            quit = 1;
+            close_game();
         }
 
         if (keystate[SDL_SCANCODE_UP] || keystate[SDL_SCANCODE_W])
         {
-            move_paddle(&paddle[player],height, 1); // 1 is up
-            send_paddle_position(paddle[player].x, paddle[player].y, player+1);
+            move_paddle(&paddle[player], height, 1); // 1 is up
+            send_paddle_position(paddle[player].x, paddle[player].y, player + 1);
         }
         if (keystate[SDL_SCANCODE_DOWN] || keystate[SDL_SCANCODE_S])
         {
-            move_paddle(&paddle[player],height, 0); // 0 is down
-            send_paddle_position(paddle[player].x, paddle[player].y, player+1);
+            move_paddle(&paddle[player], height, 0); // 0 is down
+            send_paddle_position(paddle[player].x, paddle[player].y, player + 1);
         }
-        
 
         move_ball(&ball, height, width, paddle[player], player);
-        
-        
+
         // draw background
         SDL_RenderClear(renderer);
         SDL_FillRect(screen, NULL, 0x000000ff);
