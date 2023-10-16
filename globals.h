@@ -14,8 +14,8 @@
 #define OK 0
 
 //SERVER
-#define PORT 8888
-#define IP "127.0.0.1"
+#define PORT 3001
+#define IP "3.145.191.38"
 
 //ACTIONS
 #define ERROR "error\n"
