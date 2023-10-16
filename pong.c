@@ -27,7 +27,7 @@ ball_t ball;
 paddle_t paddle[2];
 int score[] = {0, 0};
 int player = 0;
-int winner = 0;
+int winner = 100; // random number to avoid false positives
 
 // changable variables
 int sleep = 0;
@@ -62,7 +62,7 @@ void update_player(int player_number)
 
 void update_winner(int winner_number)
 {
-    winner = winner_number;
+    winner = winner_number-1;
 }
 
 void close_game()
@@ -89,7 +89,7 @@ void pong_init()
 
         const Uint8 *keystate = SDL_GetKeyboardState(NULL);
 
-        if (winner != 0)
+        if (winner != 100)
         {
             if (winner == player)
             {
