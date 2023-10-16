@@ -100,7 +100,7 @@ void pong_init()
                 printf("YOU LOST 😔\n");
             }
 
-            winner = 0;
+            winner = 100;
             quit = 1;
             in_game = FALSE;
         }
