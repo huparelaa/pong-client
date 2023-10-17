@@ -18,12 +18,11 @@ void ball_updater(ball_t *ball, int x, int y, int dx, int dy)
 // Mover la pelota
 void move_ball(ball_t *ball, int h, int w, paddle_t paddle, int player)
 {
-    player = player;
     ball->x += ball->dx;
     ball->y += ball->dy;
     if (able_to_send_score)
     {
-        if (player == 0)
+        if (player == 1)
         {
             if (ball->x > w - 10)
             {
@@ -31,7 +30,7 @@ void move_ball(ball_t *ball, int h, int w, paddle_t paddle, int player)
                 able_to_send_score = 0;
             }
         }
-        else if (player == 1)
+        else if (player == 0)
         {
             if (ball->x < 0)
             {
