@@ -47,18 +47,18 @@ int check_collision(ball_t ball, paddle_t paddle)
 void collision_handler(ball_t *ball, paddle_t paddle)
 {
     // ball moving left
-    if (ball->dx < 0)
-    {
+    // if (ball->dx < 0)
+    // {
 
-        ball->dx -= 1;
+    //     ball->dx -= 1;
 
-        // ball moving right
-    }
-    else
-    {
+    //     // ball moving right
+    // }
+    // else
+    // {
 
-        ball->dx += 1;
-    }
+    //     ball->dx += 1;
+    // }
 
     // change ball direction
     ball->dx = -ball->dx;
