@@ -33,8 +33,13 @@ int winner = 100; // random number to avoid false positives
 int sleep = 0;
 int quit = 0;
 
+int able_to_send_score = 1;
 void update_ball(int x, int y, int dx, int dy)
 {
+    if(x == 320 && y == 240)
+    {
+        able_to_send_score = 1;
+    }
     ball_updater(&ball, x, y, dx, dy);
 }
 
@@ -52,7 +57,6 @@ void update_score(int score1, int score2)
 {
     score[0] = score1;
     score[1] = score2;
-    printf("Score: %d %d\n", score[0], score[1]);
 }
 
 void update_player(int player_number)
@@ -158,7 +162,6 @@ void pong_init()
 
         if (sleep >= 0)
         {
-
             SDL_Delay(sleep);
         }
     }

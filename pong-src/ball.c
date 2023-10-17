@@ -3,6 +3,9 @@
 #include "paddle.h"
 #include "../pong_info_sender.h"
 #include <stdio.h>
+#include "../pong.h"
+
+extern int able_to_send_score;
 // Función para inicializar una pelota
 void ball_updater(ball_t *ball, int x, int y, int dx, int dy)
 {
@@ -18,23 +21,23 @@ void move_ball(ball_t *ball, int h, int w, paddle_t paddle, int player)
     player = player;
     ball->x += ball->dx;
     ball->y += ball->dy;
-    if (player == 0)
+    if (able_to_send_score)
     {
-        if (ball->x > w - 10)
+        if (player == 0)
         {
-            player_scored(1);
-            for (int i = 0; i < 100000000; i++)
-                ;
+            if (ball->x > w - 10)
+            {
+                player_scored(1);
+                able_to_send_score = 0;
+            }
         }
-    }
-    else if (player == 1)
-    {
-        if (ball->x < 0)
+        else if (player == 1)
         {
-            player_scored(2);
-            // delay to prevent false positives
-            for (int i = 0; i < 100000000; i++)
-                ;
+            if (ball->x < 0)
+            {
+                player_scored(2);
+                able_to_send_score = 0;
+            }
         }
     }
 
@@ -43,41 +46,3 @@ void move_ball(ball_t *ball, int h, int w, paddle_t paddle, int player)
         ball->dy = -ball->dy;
     }
 }
-
-// Función para mover una pelota
-// void move_ball(ball_t *ball, paddle_t paddle[2], int h, int w, int score[2]){
-//     ball->x += ball->dx;
-//     ball->y += ball->dy;
-
-//     if (ball->x < 0)
-//     {
-//         score[1] += 1;
-//         init_game(ball, paddle, h, w);
-//     }
-
-//     if (ball->x > w - 10)
-//     {
-//         score[0] += 1;
-//         init_game(ball, paddle, h, w);
-//     }
-
-//     if (ball->y < 0 || ball->y > h - 10)
-//     {
-//         ball->dy = -ball->dy;
-//     }
-
-//     // check for collision with the paddle
-//     int i;
-
-//     for (i = 0; i < 2; i++)
-//     {
-//         int c = check_collision(*ball, paddle[i]);
-
-//         // collision detected
-//         if (c == 1)
-//         {
-//             collision_handler(ball, paddle[i]);
-//         }
-//     }
-
-// }
