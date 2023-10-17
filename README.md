@@ -68,3 +68,10 @@ La implementación de una arquitectura cliente/servidor no solo brindó la compr
 ### Énfasis en Buenas Prácticas de Programación
 
 Durante el desarrollo del juego, aplicamos diversos principios de diseño de software, modularidad y organización de código. Esto nos permitió afianzar las buenas prácticas de programación, como la legibilidad del código, la documentación adecuada y la gestión de errores. Gracias a la creación de este proyecto, obtuvimos una visión más amplia de nuevos conceptos con la implementación de sockets.
+
+## 4. Referencias
+
+https://github.com/gesslerpd/udp-chat
+https://www.geeksforgeeks.org/tcp-server-client-implementation-in-c/
+https://beej.us/guide/bgnet/
+https://beej.us/guide/bgc/
