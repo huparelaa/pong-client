@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 #include "paddle.h"
+#include "../globals.h"
 
 // función para modificar la posición de la paleta
 void paddle1_updater(paddle_t *paddle, int x, int y)
@@ -23,9 +24,9 @@ void move_paddle(paddle_t *paddle, int height, int d)
 {
     if (d == 0)
     {
-        if (paddle->y >= height - paddle->h)
+        if (paddle->y >= height - PADDLE_HEIGHT)
         {
-            paddle->y = height - paddle->h;
+            paddle->y = height - PADDLE_HEIGHT;
         }
         else
         {

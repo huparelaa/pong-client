@@ -64,7 +64,7 @@ void collision_handler(ball_t *ball, paddle_t paddle)
     ball->dx = -ball->dx;
 
     // change ball angle based on where on the paddle it hit
-    int hit_pos = (paddle.y + paddle.h) - ball->y;
+    int hit_pos = (paddle.y + PADDLE_HEIGHT) - ball->y;
 
     if (hit_pos >= 0 && hit_pos < 7)
     {
