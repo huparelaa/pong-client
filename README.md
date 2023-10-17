@@ -14,7 +14,7 @@ Desarrollamos un juego Pong con una arquitectura cliente/servidor y presentamos 
 
 ### **Paso 1: Diseñar el Protocolo de Comunicación**
 
-- Definimos el protocolo de comunicación entre el cliente y el servidor, llamado "MyAppGameProtocol". Esto incluye la estructura de los mensajes que se enviarán entre el cliente y el servidor para llevar a cabo las operaciones del juego, como el registro del jugador, la actualización de la posición de la paleta, etc.
+- Definimos el protocolo de comunicación entre el cliente y el servidor, llamado "Protocole". Esto incluye la estructura de los mensajes que se enviarán entre el cliente y el servidor para llevar a cabo las operaciones del juego, como el registro del jugador, la actualización de la posición de la paleta, el informe de colisiones, etc.
 
 ### **Paso 2: Configurar el Servidor**
 
@@ -40,11 +40,11 @@ Desarrollamos un juego Pong con una arquitectura cliente/servidor y presentamos 
 
 ### **Paso 5: Implementar la Comunicación Cliente-Servidor**
 
-- Utilizamos el protocolo "MyAppGameProtocol" definido en el Paso 1 para permitir que el cliente y el servidor se comuniquen entre sí durante el juego. Esto incluye el envío de mensajes de actualización de posición, solicitudes de puntuación, notificaciones de colisiones, etc.
+- Utilizamos el protocolo "Protocole" definido en el Paso 1 para permitir que el cliente y el servidor se comuniquen entre sí durante el juego. Esto incluye el envío de mensajes de actualización de posición, solicitudes de puntuación, notificaciones de colisiones, etc.
 
 ### **Paso 6: Implementar el Servidor en la Nube (AWS)**
 
-- Por último, desplegamos el servidor de juego en un servidor en la nube, como AWS. Configuramos las reglas de seguridad y red para permitir que los clientes se conecten al servidor en la nube.
+- Por último, desplegamos el servidor de juego en un servidor en la nube, como AWS. Configuramos las reglas de seguridad y red para permitir que los clientes se conecten al servidor en la nube por medio de una conexión UDP.
 
 ### **Diagramas de apoyo UML**
 
@@ -71,7 +71,7 @@ Durante el desarrollo del juego, aplicamos diversos principios de diseño de sof
 
 ## 4. Referencias
 
-https://github.com/gesslerpd/udp-chat
-https://www.geeksforgeeks.org/tcp-server-client-implementation-in-c/
-https://beej.us/guide/bgnet/
-https://beej.us/guide/bgc/
+* https://github.com/gesslerpd/udp-chat
+* https://www.geeksforgeeks.org/tcp-server-client-implementation-in-c/
+* https://beej.us/guide/bgnet/
+* https://beej.us/guide/bgc/
