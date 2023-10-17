@@ -57,6 +57,7 @@ void update_score(int score1, int score2)
 
 void update_player(int player_number)
 {
+    printf("Player: %d\n", player_number);
     player = player_number - 1; // player_number is 1 or 2, but player is 0 or 1 (array index)
 }
 

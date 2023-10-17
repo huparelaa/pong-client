@@ -15,20 +15,26 @@ void ball_updater(ball_t *ball, int x, int y, int dx, int dy)
 // Mover la pelota
 void move_ball(ball_t *ball, int h, int w, paddle_t paddle, int player)
 {
+    player = player;
     ball->x += ball->dx;
     ball->y += ball->dy;
-    if (player == 2)
+    if (player == 0)
+    {
+        if (ball->x > w - 10)
+        {
+            player_scored(1);
+            for (int i = 0; i < 100000000; i++)
+                ;
+        }
+    }
+    else if (player == 1)
     {
         if (ball->x < 0)
         {
-            printf("Player 2 scored\n");
             player_scored(2);
-        }
-    }else if(player == 1){
-        if (ball->x > w - 10)
-        {
-            printf("Player 1 scored\n");
-            player_scored(1);
+            // delay to prevent false positives
+            for (int i = 0; i < 100000000; i++)
+                ;
         }
     }
 
