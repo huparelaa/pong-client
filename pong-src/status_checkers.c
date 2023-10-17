@@ -2,70 +2,41 @@
 #include <stdio.h>
 #include "ball.h"
 #include "paddle.h"
-int check_score(int MAX_SCORE, int score[2])
-{
-    for (int i = 0; i < 2; i++)
-    {
-        if (score[i] == MAX_SCORE)
-        {
-
-            // reset scores
-            score[0] = 0;
-            score[1] = 0;
-
-            // return 1 if player 1 score @ limit
-            if (i == 0)
-            {
-
-                return 1;
-
-                // return 2 if player 2 score is @ limit
-            }
-            else
-            {
-
-                return 2;
-            }
-        }
-    }
-
-    // return 0 if no one has reached a score of 10 yet
-    return 0;
-}
+#include "../globals.h"
 // if return 1 collision detected else return 0
-int check_collision(ball_t a, paddle_t b)
+int check_collision(ball_t ball, paddle_t paddle)
 {
-    int left_a, left_b;
-    int right_a, right_b;
-    int top_a, top_b;
-    int bottom_a, bottom_b;
+    int left_ball, left_paddle;
+    int right_ball, right_paddle;
+    int top_ball, top_paddle;
+    int bottom_ball, bottom_paddle;
 
-    left_a = a.x;
-    right_a = a.x + a.w;
-    top_a = a.y;
-    bottom_a = a.y + a.h;
+    left_ball = ball.x;
+    right_ball = ball.x + BALL_WIDTH;
+    top_ball = ball.y;
+    bottom_ball = ball.y + BALL_HEIGHT;
 
-    left_b = b.x;
-    right_b = b.x + b.w;
-    top_b = b.y;
-    bottom_b = b.y + b.h;
+    left_paddle = paddle.x;
+    right_paddle = paddle.x + PADDLE_WIDTH;
+    top_paddle = paddle.y;
+    bottom_paddle = paddle.y + PADDLE_HEIGHT;
 
-    if (left_a > right_b)
+    if (left_ball > right_paddle)
     {
         return 0;
     }
 
-    if (right_a < left_b)
+    if (right_ball < left_paddle)
     {
         return 0;
     }
 
-    if (top_a > bottom_b)
+    if (top_ball > bottom_paddle)
     {
         return 0;
     }
 
-    if (bottom_a < top_b)
+    if (bottom_ball < top_paddle)
     {
         return 0;
     }

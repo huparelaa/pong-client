@@ -123,7 +123,12 @@ void pong_init()
         }
 
         move_ball(&ball, height, width, paddle[player], player);
-
+        int collision = check_collision(ball, paddle[player]);
+        if (collision == 1)
+        {
+            collision_handler(&ball, paddle[player]);
+            send_ball_position(ball.x, ball.y, ball.dx, ball.dy);
+        }
         // draw background
         SDL_RenderClear(renderer);
         SDL_FillRect(screen, NULL, 0x000000ff);

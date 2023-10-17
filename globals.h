@@ -1,4 +1,4 @@
-#include<string.h>
+#include <string.h>
 
 // ROOMS
 #define MAX_CLIENTS 2
@@ -59,3 +59,9 @@
 // PONG SENDER FLAGS
 #define SCORE_SENDER_1 "1SCORED"
 #define SCORE_SENDER_2 "2SCORED"
+
+// PONG DIMENSIONS
+#define PADDLE_WIDTH 10
+#define PADDLE_HEIGHT 50
+#define BALL_WIDTH 10
+#define BALL_HEIGHT 10

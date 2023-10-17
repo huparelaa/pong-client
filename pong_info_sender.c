@@ -30,3 +30,13 @@ void player_scored(int player){
         perror("score sending");
     }
 }
+
+void send_ball_position(int x, int y, int dx, int dy){
+    char send_buffer[BUF_SIZE];
+    sprintf(send_buffer, "%s %d %d %d %d", BALL_UPDATER, x, y, dx, dy);
+    // send message to server
+    if (send(sockfd, send_buffer, strlen(send_buffer), 0) == SYSERR)
+    {
+        perror("ball sending");
+    }
+}
