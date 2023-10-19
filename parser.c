@@ -63,9 +63,9 @@ int buffer_parser(char *buffer)
         update_winner(winner);
         return OK;
     }
-    else if (strcmp(token, CLOSE_GAME) == 0)
+    else if (strcmp(token, RESTART) == 0)
     {
-        close_game();
+        restart_game();
         return OK;
     }
     else

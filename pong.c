@@ -36,11 +36,11 @@ int quit = 0;
 int able_to_send_score = 1;
 void update_ball(int x, int y, int dx, int dy)
 {
-    if(x == 320 && y == 240)
-    {
-        able_to_send_score = 1;
-    }
     ball_updater(&ball, x, y, dx, dy);
+}
+
+void restart_game(){
+    able_to_send_score = 1;
 }
 
 void update_paddle1(int x, int y)
@@ -68,10 +68,6 @@ void update_player(int player_number)
 void update_winner(int winner_number)
 {
     winner = winner_number-1;
-}
-
-void close_game()
-{
 }
 
 void pong_init()
@@ -108,11 +104,6 @@ void pong_init()
             winner = 100;
             quit = 1;
             in_game = FALSE;
-        }
-
-        if (keystate[SDL_SCANCODE_ESCAPE])
-        {
-            close_game();
         }
 
         if (keystate[SDL_SCANCODE_UP] || keystate[SDL_SCANCODE_W])
