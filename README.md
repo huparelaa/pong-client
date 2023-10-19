@@ -1,8 +1,8 @@
-# Juego Pong con Multijugador en Línea usando AWS
+# Juego Pong con Multijugador en Línea usando AWS en C
 
 ## 1. Introducción
 
-Este proyecto se centra en el desarrollo de un juego clásico llamado 'Pong', pero con un toque más moderno. En lugar de jugar contra la máquina, permite que dos o más jugadores compitan en una partida de Pong en línea utilizando servidores de AWS.
+Este proyecto se centra en el desarrollo de un juego clásico llamado 'Pong'. El juego permite que dos o más jugadores compitan en una partida de Pong en línea utilizando servidores de AWS.
 
 La clave de este proyecto radica en su estilo arquitectónico cliente/servidor. Los jugadores descargan una aplicación cliente que se conecta a un servidor, lo que posibilita partidas en tiempo real entre jugadores desde sus propios dispositivos.
 
@@ -26,7 +26,7 @@ Desarrollamos un juego Pong con una arquitectura cliente/servidor y presentamos 
 
 ### **Paso 3: Crear el Cliente**
 
-- Creamos un programa de cliente en C que se conecta al servidor utilizando la dirección IP o el nombre de host del servidor y el puerto específico. Utilizamos la API de sockets de Berkeley para establecer la conexión.
+- Creamos un programa de cliente en C que se conecta al servidor utilizando la dirección IP del servidor y el puerto específico. Utilizamos la API de sockets de Berkeley para establecer la conexión.
 
 - Implementamos la funcionalidad de registro en el cliente. El cliente envía un mensaje de registro al servidor con un apodo (nickname) elegido por el jugador.
 
@@ -34,13 +34,15 @@ Desarrollamos un juego Pong con una arquitectura cliente/servidor y presentamos 
 
 ### **Paso 4: Implementar la Lógica del Juego**
 
-- En el servidor y el cliente, desarrollamos la lógica del juego Pong. Esto incluye la representación de la pelota, las paletas, la detección de colisiones, la actualización de la posición de la paleta, el seguimiento de las puntuaciones, etc.
+- Implementamos la lógica del juego pong del lado del cliente, siendo básicamente estas las colisiones y el movimento de la pelota, así como también el movimiento de las paletas. Logrando así que el juego se ejecute de manera fluida para el usuario.
 
 - Aseguramos que el servidor y el cliente estén sincronizados para mantener el estado del juego consistente entre todos los jugadores.
 
 ### **Paso 5: Implementar la Comunicación Cliente-Servidor**
 
 - Utilizamos el protocolo "Protocole" definido en el Paso 1 para permitir que el cliente y el servidor se comuniquen entre sí durante el juego. Esto incluye el envío de mensajes de actualización de posición, solicitudes de puntuación, notificaciones de colisiones, etc.
+
+- Creamos un protocolo basado en texto para manejar el envío y recepción de peticiones tanto del lado del cliente como del servidor, el cual es capaz de decodificar con un *parser* incluido en el protocolo de tal manera que podemos diferenciar entre solicitudes de actualización de posiciones de pelota, paleta y puntuación así como también mensajes y comandos.
 
 ### **Paso 6: Implementar el Servidor en la Nube (AWS)**
 
@@ -59,7 +61,7 @@ Desarrollamos un juego Pong con una arquitectura cliente/servidor y presentamos 
 
 ### Refinamiento de Habilidades de Programación en C
 
-El desarrollo de un juego retro 'Pong' nos brindó la oportunidad de fortalecer y aplicar conceptos de programación en el lenguaje C, incluyendo el uso de nuevos conceptos de dicho lenguaje.
+El desarrollo de un juego retro 'Pong' nos brindó la oportunidad de fortalecer y aplicar conceptos de programación en el lenguaje C, incluyendo el uso de nuevos conceptos de dicho lenguaje como el manejo de cadenas de texto.
 
 ### Aplicación de Arquitectura Cliente/Servidor
 
@@ -75,3 +77,4 @@ Durante el desarrollo del juego, aplicamos diversos principios de diseño de sof
 * https://www.geeksforgeeks.org/tcp-server-client-implementation-in-c/
 * https://beej.us/guide/bgnet/
 * https://beej.us/guide/bgc/
+* https://github.com/flightcrank/pong
